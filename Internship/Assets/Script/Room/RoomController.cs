@@ -57,7 +57,7 @@ public class RoomController : MonoBehaviour
             List<RoomGate> gatesFiltered = new List<RoomGate>(); 
             foreach (RoomGate gate in gates)
             {
-                if (gate.gameObject.active)
+                if (gate.gameObject.activeSelf)
                 {
                     gatesFiltered.Add(gate);
                 }
