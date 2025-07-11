@@ -16,16 +16,17 @@ public class GunnyEnemy : BaseEnemy
 
     float timeCount = 0f;
 
-    SpriteRenderer renderer;
-    Rigidbody2D rigidbody;
+    SpriteRenderer spriteRenderer;
+    Rigidbody2D rb;
+
     Vector2 direction;
 
     // Use this for initialization
     new void Start()
     {
         base.Start();
-        renderer = GetComponent<SpriteRenderer>();
-        rigidbody = GetComponent<Rigidbody2D>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
@@ -43,8 +44,8 @@ public class GunnyEnemy : BaseEnemy
     void LookAtPlayer()
     {
         direction = this.target.transform.position - transform.position;
-        renderer.flipX = direction.x < 0;
-        rigidbody.position += direction.normalized * _speed * Time.deltaTime;
+        spriteRenderer.flipX = direction.x < 0;
+        rb.position += direction.normalized * _speed * Time.deltaTime;
     }
 
     void DoIfSeePlayer()

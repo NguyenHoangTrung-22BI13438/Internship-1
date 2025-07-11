@@ -4,19 +4,19 @@ using System.Collections;
 public class Bullet : MonoBehaviour
 {
     private float damage = 2f;
-    private Rigidbody2D rigidbody;
+    private Rigidbody2D rb;
     public float velocity = 2f;
 
     // Use this for initialization
     void Start()
     {
-        rigidbody = GetComponent<Rigidbody2D>();
+        rb = GetComponent<Rigidbody2D>();
     }
 
     // Update is called once per frame
     void Update()
     {
-        rigidbody.velocity = velocity * (this.transform.rotation * Vector3.up);
+        rb.velocity = velocity * (this.transform.rotation * Vector3.up);
     } 
 
     public void SetDamage(float damage)
