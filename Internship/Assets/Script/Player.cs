@@ -5,19 +5,15 @@ using UnityEngine;
 public class Player : MonoBehaviour
 {
     SpriteRenderer spriteRenderer;
-
-
     public GameObject weapon;
 
     float count = 0;
 
-    // Start is called before the first frame update
     void Start()
     {
         this.spriteRenderer = GetComponent<SpriteRenderer>();
     }
 
-    // Update is called once per frame
     void Update()
     {
         this.followMouse();
@@ -26,21 +22,44 @@ public class Player : MonoBehaviour
     private void followMouse()
     {
         Vector2 mousePosition = (Vector2)Camera.main.ScreenToWorldPoint(Input.mousePosition);
-        Vector2 direction = new Vector2(
-                mousePosition.x - transform.position.x,
-                mousePosition.y - transform.position.y
-            );
+        Vector2 direction = mousePosition - (Vector2)transform.position;
         direction.Normalize();
 
-        if (direction.x < 0)
+        spriteRenderer.flipX = direction.x < 0;
+    }
+
+    public void TakeDamage(float amount)
+    {
+        ParametersScript.healValue -= (int)amount;
+
+        if (ParametersScript.healValue <= 0)
         {
-            this.spriteRenderer.flipX = true;
-        }
-        else
-        {
-            this.spriteRenderer.flipX = false;
+            // ✅ Save the player's run data before death
+            SpriteRenderer sr = GetComponent<SpriteRenderer>();
+            if (sr && sr.sprite != null)
+            {
+                RunRecorder.lastRunData = new PlayerData
+                {
+                    maxHealth = ParametersScript.healValue,
+                    speed = 5f, // you can change this if you store player speed elsewhere
+                    acquiredSkills = new List<string>(), // not yet implemented
+                    acquiredItems = new List<string>(),  // not yet implemented
+                    weaponName = weapon?.name,
+                    weaponDamage = weapon?.GetComponent<BaseWeapon>()?.damage ?? 0,
+                    weaponFireRate = (weapon?.GetComponent<Gun>()?.fireRate) ?? 0,
+                    spriteName = sr.sprite.name // ✅ Save sprite name for mirror boss
+                };
+            }
+
+            int score = PlayerPrefs.GetInt("score", 0);
+            int heal = PlayerPrefs.GetInt("heal", 1000);
+
+            LevelController.Instance.startGame();
+            ParametersScript.healValue = heal;
+            ParametersScript.scoreValue = score;
         }
     }
+
 
     private void OnCollisionEnter2D(Collision2D other)
     {
@@ -48,19 +67,11 @@ public class Player : MonoBehaviour
         switch (other.collider.tag)
         {
             case TAG.ENEMY:
-                ParametersScript.healValue -= 100;
+                TakeDamage(100);
                 break;
             case TAG.ENEMY_BULLET:
-                ParametersScript.healValue -= 200;
+                TakeDamage(200);
                 break;
-            default:
-                break;
-
-        }
-        if (ParametersScript.healValue <= 0)
-        {
-            LevelController.Instance.startGame();
-            ParametersScript.healValue = 1000; ;
         }
     }
 
@@ -72,25 +83,13 @@ public class Player : MonoBehaviour
             switch (other.collider.tag)
             {
                 case TAG.ENEMY:
-                    ParametersScript.healValue -= 50;
+                    TakeDamage(50);
                     break;
                 case TAG.ENEMY_BULLET:
-                    ParametersScript.healValue -= 100;
+                    TakeDamage(100);
                     break;
-                default:
-                    break;
-
             }
             count = 0;
-        }
-        if (ParametersScript.healValue <= 0)
-        {
-            int score = PlayerPrefs.GetInt("score", 0);
-            int heal = PlayerPrefs.GetInt("heal", 1000);
-
-            LevelController.Instance.startGame();
-            ParametersScript.healValue = heal;
-            ParametersScript.scoreValue = score;
         }
     }
 }

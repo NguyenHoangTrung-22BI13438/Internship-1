@@ -11,66 +11,70 @@ public class BaseEnemy : MonoBehaviour
 
     public Slider healthbar;
 
-    public float health
-    {
-        get { return _health; }
-    }
+    public float health => _health;
 
-    // Use this for initialization
-    protected void Start()
+    protected virtual void Start()
     {
         _health = maxHealth;
-        healthbar.maxValue = maxHealth;
+        if (healthbar != null)
+        {
+            healthbar.maxValue = maxHealth;
+        }
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Collider2D collider = collision;
-        Debug.Log("Dungeon: collision " + collider);
-        if (collider.tag == TAG.SWORD)
+        if (collision.CompareTag(TAG.SWORD))
         {
-            SwordAttack swordAttack = collider.GetComponent<SwordAttack>();
-            if (swordAttack.attacking)
+            SwordAttack swordAttack = collision.GetComponent<SwordAttack>();
+            if (swordAttack != null && swordAttack.attacking)
             {
-                Debug.Log("Attacked" + swordAttack.baseWeapon.damage);
+                Debug.Log("Attacked by sword: " + swordAttack.baseWeapon.damage);
                 swordAttack.attacking = false;
-                this.GotDamage(swordAttack.baseWeapon.damage, collider);
+                GotDamage(swordAttack.baseWeapon.damage, collision);
             }
         }
-        else if (collider.tag == TAG.BULLET)
+        else if (collision.CompareTag(TAG.BULLET))
         {
-            Bullet bullet = collider.GetComponent<Bullet>();
+            Bullet bullet = collision.GetComponent<Bullet>();
             if (bullet != null)
             {
-                Debug.Log("Attacked" + bullet.GetDamage());
-                this.GotDamage(bullet.GetDamage(), collider);
+                Debug.Log("Attacked by bullet: " + bullet.GetDamage());
+                GotDamage(bullet.GetDamage(), collision);
             }
         }
     }
 
     protected void GotDamage(float damage, Collider2D collider)
     {
-        this.OnAttacked(collider);
-        if (_health >= damage)
+        OnAttacked(collider);
+        _health = Mathf.Max(0, _health - damage);
+        if (_health <= 0)
         {
-            _health -= damage;
-        } else
-        {
-            _health = 0;
-            this.OnDie();
+            OnDie();
         }
     }
 
-    protected virtual void OnAttacked(Collider2D collider) {}
-    protected virtual void OnDie() {
+    protected virtual void OnAttacked(Collider2D collider) { }
+
+    protected virtual void OnDie()
+    {
         ParametersScript.scoreValue += 10;
         Destroy(gameObject);
     }
 
-    // Update is called once per frame
-    protected void Update()
+    protected virtual void Update()
     {
-        healthbar.value = this.health;
-        healthbar.gameObject.SetActive(healthbar.value < maxHealth);
+        // 🧠 Fix: auto-find player if missing (support old scenes)
+        if (target == null)
+        {
+            target = FindObjectOfType<Player>();
+        }
+
+        if (healthbar != null)
+        {
+            healthbar.value = this.health;
+            healthbar.gameObject.SetActive(healthbar.value < maxHealth);
+        }
     }
 }

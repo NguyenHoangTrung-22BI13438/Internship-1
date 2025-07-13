@@ -6,9 +6,10 @@ public class Gun : BaseWeapon
     public GameObject bulletPrefab;
 
     [SerializeField]
-    protected float fireRate = 1f; // bullets in second
+    public float fireRate = 1f; // bullets in second
 
     protected float timeCount = 0f;
+
 
     // Use this for initialization
     new void Start()
