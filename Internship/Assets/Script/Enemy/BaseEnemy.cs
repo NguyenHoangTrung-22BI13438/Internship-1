@@ -77,4 +77,13 @@ public class BaseEnemy : MonoBehaviour
             healthbar.gameObject.SetActive(healthbar.value < maxHealth);
         }
     }
+    public GameObject coinPrefab;  // assign in Inspector
+
+    void Die()
+    {
+        if (coinPrefab != null)
+            Instantiate(coinPrefab, transform.position, Quaternion.identity);
+        Destroy(gameObject);
+    }
+
 }

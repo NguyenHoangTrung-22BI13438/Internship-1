@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement;
 using TMPro;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 public class ShopController : MonoBehaviour
@@ -22,76 +22,50 @@ public class ShopController : MonoBehaviour
         playerCoins = ParametersScript.scoreValue;
         UpdateCoinsDisplay();
         PopulateShop();
-
-        // Set up back button
-        backButton.onClick.AddListener(GoBack);
+        backButton.onClick.AddListener(() => SceneManager.LoadScene("Level01"));
     }
 
     void PopulateShop()
     {
-        foreach (ShopItem item in availableItems)
+        foreach (var item in availableItems)
         {
-            GameObject itemUI = Instantiate(shopItemUIPrefab, itemsContainer);
+            var ui = Instantiate(shopItemUIPrefab, itemsContainer);
+            ui.transform.Find("Icon").GetComponent<Image>().sprite = item.icon;
+            ui.transform.Find("Name").GetComponent<TextMeshProUGUI>().text = item.itemName;
+            ui.transform.Find("Price").GetComponent<TextMeshProUGUI>().text = item.price.ToString();
+            ui.transform.Find("Description").GetComponent<TextMeshProUGUI>().text = item.value.ToString();
 
-            // Set up item UI components
-            itemUI.transform.Find("ItemIcon").GetComponent<Image>().sprite = item.itemIcon;
-            itemUI.transform.Find("ItemName").GetComponent<TextMeshProUGUI>().text = item.itemName;
-            itemUI.transform.Find("ItemPrice").GetComponent<TextMeshProUGUI>().text = item.price.ToString();
-            itemUI.transform.Find("ItemDescription").GetComponent<TextMeshProUGUI>().text = item.description;
-
-            Button buyButton = itemUI.transform.Find("BuyButton").GetComponent<Button>();
-            buyButton.onClick.AddListener(() => TryBuyItem(item));
-
-            // Disable button if can't afford
-            UpdateItemUI(itemUI, item);
+            var btn = ui.transform.Find("BuyButton").GetComponent<Button>();
+            btn.onClick.AddListener(() => TryBuy(item, ui));
+            btn.interactable = playerCoins >= item.price;
         }
     }
 
-    void UpdateItemUI(GameObject itemUI, ShopItem item)
+    void TryBuy(ShopItem item, GameObject ui)
     {
-        Button buyButton = itemUI.transform.Find("BuyButton").GetComponent<Button>();
-        buyButton.interactable = (playerCoins >= item.price);
-    }
-
-    void TryBuyItem(ShopItem item)
-    {
-        if (playerCoins >= item.price)
-        {
-            playerCoins -= item.price;
-            ParametersScript.scoreValue = playerCoins;
-
-            // Apply item effect
-            ApplyItemEffect(item);
-
-            UpdateCoinsDisplay();
-            RefreshShopUI();
-
-            Debug.Log($"Bought {item.itemName} for {item.price} coins!");
-        }
-        else
-        {
-            Debug.Log("Not enough coins!");
-        }
+        if (playerCoins < item.price) return;
+        playerCoins -= item.price;
+        ParametersScript.scoreValue = playerCoins;
+        ApplyItemEffect(item);
+        UpdateCoinsDisplay();
+        ui.transform.Find("BuyButton").GetComponent<Button>().interactable = false;
     }
 
     void ApplyItemEffect(ShopItem item)
     {
-        switch (item.itemType)
+        switch (item.type)
         {
             case ShopItem.ShopItemType.HealthPotion:
-                ParametersScript.healValue += item.value;
-                if (ParametersScript.healValue > 1000) // Cap at max health
-                    ParametersScript.healValue = 1000;
+                ParametersScript.healValue = Mathf.Min(1000, ParametersScript.healValue + item.value);
                 break;
-
             case ShopItem.ShopItemType.DamageUpgrade:
-                // You'll need to implement a damage upgrade system
                 PlayerPrefs.SetInt("DamageUpgrade", PlayerPrefs.GetInt("DamageUpgrade", 0) + item.value);
                 break;
-
             case ShopItem.ShopItemType.SpeedUpgrade:
-                // You'll need to implement a speed upgrade system
-                PlayerPrefs.SetInt("SpeedUpgrade", PlayerPrefs.GetInt("SpeedUpgrade", 0) + item.value);
+                PlayerPrefs.SetFloat("SpeedUpgrade", PlayerPrefs.GetFloat("SpeedUpgrade", 1f) + item.value);
+                break;
+            case ShopItem.ShopItemType.Weapon:
+                // instantiate weapon or add to inventory
                 break;
         }
     }
@@ -99,22 +73,5 @@ public class ShopController : MonoBehaviour
     void UpdateCoinsDisplay()
     {
         coinsText.text = $"Coins: {playerCoins}";
-    }
-
-    void RefreshShopUI()
-    {
-        // Update all buy buttons based on current coins
-        for (int i = 0; i < itemsContainer.childCount; i++)
-        {
-            GameObject itemUI = itemsContainer.GetChild(i).gameObject;
-            ShopItem item = availableItems[i];
-            UpdateItemUI(itemUI, item);
-        }
-    }
-
-    void GoBack()
-    {
-        // Return to previous scene or main menu
-        SceneManager.LoadScene("Level01"); // Adjust scene name as needed
     }
 }

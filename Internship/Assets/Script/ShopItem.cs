@@ -4,17 +4,10 @@ using UnityEngine;
 public class ShopItem
 {
     public string itemName;
-    public string description;
-    public Sprite itemIcon;
+    public Sprite icon;
     public int price;
-    public ShopItemType itemType;
-    public int value; // For health potions, damage upgrades, etc.
+    public ShopItemType type;
+    public int value;  // effect magnitude
 
-    public enum ShopItemType
-    {
-        HealthPotion,
-        DamageUpgrade,
-        SpeedUpgrade,
-        Weapon
-    }
+    public enum ShopItemType { HealthPotion, DamageUpgrade, SpeedUpgrade, Weapon }
 }
