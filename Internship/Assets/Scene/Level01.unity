@@ -6818,7 +6818,7 @@ GameObject:
   - component: {fileID: 1607313952}
   - component: {fileID: 1607313954}
   - component: {fileID: 1607313953}
-  m_Layer: 9
+  m_Layer: 0
   m_Name: Background
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -20394,6 +20394,11 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 181524849551508097, guid: b7c355558327ceb419e51b7017b44ff3,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 181524849551508098, guid: b7c355558327ceb419e51b7017b44ff3,
         type: 3}
       propertyPath: m_Name
@@ -20732,6 +20737,11 @@ PrefabInstance:
         type: 3}
       propertyPath: m_Name
       value: Sword
+      objectReference: {fileID: 0}
+    - target: {fileID: 3961667079840513832, guid: 6b22317a743b56d4ba849032712963d3,
+        type: 3}
+      propertyPath: m_Layer
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 9027962935276464108, guid: 6b22317a743b56d4ba849032712963d3,
         type: 3}

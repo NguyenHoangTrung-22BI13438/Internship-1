@@ -12,7 +12,10 @@ public class ParametersScript : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        // On any scene load, restore full health
+        healValue = 1000;
     }
+
 
     // Update is called once per frame
     void Update()

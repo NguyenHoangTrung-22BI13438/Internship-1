@@ -23,12 +23,15 @@ public class LevelController : MonoBehaviour
 
     private Queue<int> levelQueue = new Queue<int>();
 
+    // Track which levels have been used this cycle
+    private HashSet<int> usedLevels = new HashSet<int>();
+
     void Start()
     {
         if (_instance == null)
         {
             _instance = this;
-            DontDestroyOnLoad(gameObject); // Optional if persistence is needed
+            DontDestroyOnLoad(gameObject);
             GenerateLevelQueue();
         }
         else
@@ -41,55 +44,63 @@ public class LevelController : MonoBehaviour
     {
         Debug.Log("Start Game");
 
-        int levelSaved = PlayerPrefs.GetInt("level", 0);
-        PlayerPrefs.SetInt("score", ParametersScript.scoreValue);
-        PlayerPrefs.SetInt("heal", ParametersScript.healValue);
+        // reset progress
+        ParametersScript.scoreValue = 0;
+        ParametersScript.healValue = 1000;
+        PlayerPrefs.SetInt("level", 0);
 
-        currentLevel = levelSaved + 1;
+        currentLevel = levelStartIndex;
         levelCount = 0;
-        GenerateLevelQueue(); // Reset level sequence
+        usedLevels.Clear();
+        GenerateLevelQueue();
         nextLevel();
     }
 
     public void nextLevel()
     {
         Debug.Log("Next Level");
+
+        // increment counters
         PlayerPrefs.SetInt("level", currentLevel);
         currentLevel++;
         levelCount++;
 
+        // If it's time for the boss, reset for next cycle
         if (levelCount >= levelsBeforeBoss)
         {
             levelCount = 0;
-            GenerateLevelQueue(); // Reset queue for next dungeon cycle
+            usedLevels.Clear();      // allow all levels again in next cycle
+            GenerateLevelQueue();
             StartCoroutine(loadScene(bossLevelIndex));
             return;
         }
 
+        // If queue empties, regenerate from the remaining levels
         if (levelQueue.Count == 0)
-        {
             GenerateLevelQueue();
-        }
 
         int chosenLevel = levelQueue.Dequeue();
+        usedLevels.Add(chosenLevel);   // mark as used
         StartCoroutine(loadScene(chosenLevel));
     }
 
     private void GenerateLevelQueue()
     {
+        // Build list of levels that have not yet been used
         List<int> levels = new List<int>();
         for (int i = levelStartIndex; i <= levelEndIndex; i++)
         {
-            levels.Add(i);
+            if (!usedLevels.Contains(i))
+                levels.Add(i);
         }
 
-        // Fisher-Yates shuffle
+        // Fisher–Yates shuffle
         for (int i = 0; i < levels.Count; i++)
         {
-            int randomIndex = Random.Range(i, levels.Count);
-            int temp = levels[i];
-            levels[i] = levels[randomIndex];
-            levels[randomIndex] = temp;
+            int r = Random.Range(i, levels.Count);
+            int tmp = levels[i];
+            levels[i] = levels[r];
+            levels[r] = tmp;
         }
 
         levelQueue = new Queue<int>(levels);
@@ -97,7 +108,7 @@ public class LevelController : MonoBehaviour
 
     public void returnBase()
     {
-        StartCoroutine(loadScene(0)); // Assuming 0 is the main menu
+        StartCoroutine(loadScene(0));
     }
 
     IEnumerator loadScene(int level)
@@ -106,17 +117,14 @@ public class LevelController : MonoBehaviour
         progress.value = 0;
         loadingScreen.SetActive(true);
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync(level, LoadSceneMode.Single);
-
-        while (!operation.isDone)
+        AsyncOperation op = SceneManager.LoadSceneAsync(level, LoadSceneMode.Single);
+        while (!op.isDone)
         {
-            progress.value = operation.progress * 100;
-            Debug.Log($"Load {progress.value}%");
+            progress.value = op.progress * 100;
             yield return null;
         }
 
         loadingScreen.SetActive(false);
-        yield return null;
     }
 
     void Update() { }
