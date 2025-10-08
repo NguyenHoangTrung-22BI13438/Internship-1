@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 508915991586608096}
   - component: {fileID: 5070829493669579246}
   - component: {fileID: -6889297573597687447}
+  - component: {fileID: -7337032680303971733}
   m_Layer: 14
   m_Name: MirrorBoss
   m_TagString: Enemy
@@ -280,3 +281,24 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   version: 1
   target: {fileID: 0}
+--- !u!95 &-7337032680303971733
+Animator:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6565883412167575735}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: b9f9f557aa4e9684080a5a9b2a3d488e, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0

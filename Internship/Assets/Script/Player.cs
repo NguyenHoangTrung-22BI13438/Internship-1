@@ -27,7 +27,6 @@ public class Player : MonoBehaviour
 
         spriteRenderer.flipX = direction.x < 0;
     }
-
     public void TakeDamage(float amount)
     {
         ParametersScript.healValue -= (int)amount;
@@ -51,16 +50,16 @@ public class Player : MonoBehaviour
                 };
             }
 
+            // ✅ Reset health and score
             int score = PlayerPrefs.GetInt("score", 0);
             int heal = PlayerPrefs.GetInt("heal", 1000);
-
-            LevelController.Instance.startGame();
             ParametersScript.healValue = heal;
             ParametersScript.scoreValue = score;
+
+            // ✅ Return to main menu scene (assumed build index 0)
+            UnityEngine.SceneManagement.SceneManager.LoadScene(0);
         }
     }
-
-
     private void OnCollisionEnter2D(Collision2D other)
     {
         Debug.Log("xyz: " + other.collider.tag + " - " + ParametersScript.healValue);

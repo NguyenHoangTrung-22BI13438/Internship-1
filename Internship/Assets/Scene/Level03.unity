@@ -33491,12 +33491,12 @@ PrefabInstance:
     - target: {fileID: 2746171347668877049, guid: cff724c67e29e31428588ae09aad4134,
         type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 14.8
+      value: 9.7
       objectReference: {fileID: 0}
     - target: {fileID: 2746171347668877049, guid: cff724c67e29e31428588ae09aad4134,
         type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 1.55
+      value: -2.4
       objectReference: {fileID: 0}
     - target: {fileID: 3160908026849524770, guid: cff724c67e29e31428588ae09aad4134,
         type: 3}
@@ -33647,8 +33647,7 @@ MonoBehaviour:
   onSolved:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 6743289275501717646, guid: 2a3f73e2f6a4e494b985c254b0767888,
-          type: 3}
+      - m_Target: {fileID: 2004141081}
         m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
         m_MethodName: SetActive
         m_Mode: 6
@@ -33676,12 +33675,12 @@ PrefabInstance:
     - target: {fileID: 6743289275501717644, guid: 2a3f73e2f6a4e494b985c254b0767888,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 9.14
+      value: 8.8
       objectReference: {fileID: 0}
     - target: {fileID: 6743289275501717644, guid: 2a3f73e2f6a4e494b985c254b0767888,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -6.63
+      value: -5.5
       objectReference: {fileID: 0}
     - target: {fileID: 6743289275501717644, guid: 2a3f73e2f6a4e494b985c254b0767888,
         type: 3}
@@ -33738,6 +33737,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6743289275501717647, guid: 2a3f73e2f6a4e494b985c254b0767888,
+        type: 3}
+      propertyPath: m_Color.b
+      value: 0.34509805
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743289275501717647, guid: 2a3f73e2f6a4e494b985c254b0767888,
+        type: 3}
+      propertyPath: m_Color.g
+      value: 0.23137257
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743289275501717647, guid: 2a3f73e2f6a4e494b985c254b0767888,
+        type: 3}
+      propertyPath: m_Color.r
+      value: 0.2392157
+      objectReference: {fileID: 0}
+    - target: {fileID: 6743289275501717647, guid: 2a3f73e2f6a4e494b985c254b0767888,
+        type: 3}
+      propertyPath: m_SortingOrder
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6743289275888876757, guid: 2a3f73e2f6a4e494b985c254b0767888,
         type: 3}
       propertyPath: m_Mesh
@@ -33773,6 +33792,12 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 2a3f73e2f6a4e494b985c254b0767888, type: 3}
+--- !u!1 &2004141081 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6743289275501717646, guid: 2a3f73e2f6a4e494b985c254b0767888,
+    type: 3}
+  m_PrefabInstance: {fileID: 2004141080}
+  m_PrefabAsset: {fileID: 0}
 --- !u!4 &2114926793 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8304990315861353615, guid: 02603c10786fe414b922e7fb0b0cce6c,
@@ -33799,6 +33824,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 550210044, guid: 8b1612c4d7555324b8153f49919681c3, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 214
+      objectReference: {fileID: 0}
+    - target: {fileID: 550210044, guid: 8b1612c4d7555324b8153f49919681c3, type: 3}
+      propertyPath: m_AnchoredPosition.y
+      value: -147
+      objectReference: {fileID: 0}
     - target: {fileID: 550210045, guid: 8b1612c4d7555324b8153f49919681c3, type: 3}
       propertyPath: m_textAlignment
       value: 65535
@@ -33873,7 +33906,8 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1088883704}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 550210043, guid: 8b1612c4d7555324b8153f49919681c3, type: 3}
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 8494699481077252815, guid: 8b1612c4d7555324b8153f49919681c3,
         type: 3}

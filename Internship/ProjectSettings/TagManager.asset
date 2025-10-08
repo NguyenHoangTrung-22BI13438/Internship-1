@@ -20,10 +20,10 @@ TagManager:
   - 
   - Water
   - UI
-  - 
-  - 
   - Player
   - Map
+  - 
+  - 
   - Weapon
   - MapWall
   - Bullet
@@ -52,4 +52,7 @@ TagManager:
     locked: 0
   - name: Player
     uniqueID: 2071438465
+    locked: 0
+  - name: Map
+    uniqueID: 782763161
     locked: 0
